@@ -2,8 +2,11 @@ package com.jga.util.debug;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.jga.util.Validate;
+import com.jga.util.entity.EntityBase;
 
 /**
  * {@link ShapeRenderer} utility methods.
@@ -47,5 +50,22 @@ public class ShapeRendererUtils {
         Validate.notNull(circle);
 
         renderer.circle(circle.x, circle.y, circle.radius, 30);
+    }
+
+    public static void polygon(ShapeRenderer renderer, Polygon polygon) {
+        Validate.notNull(renderer);
+        Validate.notNull(polygon);
+
+        renderer.polygon(polygon.getTransformedVertices());
+    }
+
+    public static <T extends EntityBase> void entities(ShapeRenderer renderer, Array<T> entities) {
+        Validate.notNull(renderer);
+        Validate.notNull(entities);
+
+        for (int i = 0; i < entities.size; i++) {
+            T entityBase = entities.get(i);
+            polygon(renderer, entityBase.getBounds());
+        }
     }
 }

@@ -17,14 +17,15 @@ import com.jga.platformer.config.GameConfig.WORLD_HEIGHT
 import com.jga.platformer.config.GameConfig.WORLD_WIDTH
 import com.jga.util.GdxUtils
 import com.jga.util.debug.DebugCameraController
+import com.jga.util.debug.ShapeRendererUtils
 import com.jga.util.viewport.ViewportUtils
 
 
-class GameRenderer(val game: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
+class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
 
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
-    private val renderer = ShapeRenderer()
+    private val shapeRenderer = ShapeRenderer()
     private val debugCameraController = DebugCameraController().apply { setStartPosition(WORLD_CENTER_X, WORLD_CENTER_Y) }
     private val map = assetManager[AssetDescriptors.LEVEL_01]
     private val mapRenderer = OrthogonalTiledMapRenderer(map, UNIT_SCALE, batch)
@@ -57,35 +58,33 @@ class GameRenderer(val game: GameWorld, batch: SpriteBatch, assetManager: AssetM
     fun screenToWorld(screenCoordinates: Vector2): Vector2 = viewport.unproject(screenCoordinates)
 
     override fun dispose() {
-        renderer.dispose()
+        shapeRenderer.dispose()
     }
 
     private fun renderDebug() {
-        if (game.isDrawGrid) ViewportUtils.drawGrid(viewport, renderer)
+        if (gameWorld.isDrawGrid) ViewportUtils.drawGrid(viewport, shapeRenderer)
 
-        if (!game.isDrawDebug) return
+        if (!gameWorld.isDrawDebug) return
 
-        val oldColor = renderer.color.cpy()
+        val oldColor = shapeRenderer.color.cpy()
 
         viewport.apply()
-        renderer.apply {
+        shapeRenderer.apply {
             projectionMatrix = camera.combined
             begin(ShapeRenderer.ShapeType.Line)
         }
 
         drawDebug()
 
-        renderer.apply {
+        shapeRenderer.apply {
             end()
             color = oldColor
         }
     }
 
     private fun drawDebug() {
-        // draw simple circle
-        renderer.apply {
-            color = Color.GOLD
-            circle(WORLD_CENTER_X, WORLD_CENTER_Y, 2.0f, 16)
-        }
+        shapeRenderer.color = Color.GOLD
+
+        ShapeRendererUtils.entities(shapeRenderer, gameWorld.waterHazards)
     }
 }

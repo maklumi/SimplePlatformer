@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.jga.platformer.SimplePlatformerGame
 import com.jga.platformer.assets.AssetDescriptors
+import com.jga.platformer.common.EntityFactory
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
@@ -18,6 +19,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
     private lateinit var gameWorld: GameWorld
     private lateinit var renderer: GameRenderer
     private lateinit var controller: GameController
+    private val factory = EntityFactory()
 
     override fun show() {
         // todo move loading to loading screen
@@ -27,7 +29,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
             finishLoading()
         }
 
-        gameWorld = GameWorld()
+        gameWorld = factory.createGameWorld()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)
     }
