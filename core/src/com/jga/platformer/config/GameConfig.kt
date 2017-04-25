@@ -12,5 +12,6 @@ object GameConfig {
     val WORLD_CENTER_X = WORLD_WIDTH / 2f
     val WORLD_CENTER_Y = WORLD_HEIGHT / 2f
 
+    val UNIT_SCALE = 1f / 64f
 }
 

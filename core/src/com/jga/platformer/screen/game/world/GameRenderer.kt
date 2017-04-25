@@ -5,9 +5,12 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.FitViewport
+import com.jga.platformer.assets.AssetDescriptors
+import com.jga.platformer.config.GameConfig.UNIT_SCALE
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_X
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_Y
 import com.jga.platformer.config.GameConfig.WORLD_HEIGHT
@@ -17,12 +20,14 @@ import com.jga.util.debug.DebugCameraController
 import com.jga.util.viewport.ViewportUtils
 
 
-class GameRenderer(val game: GameWorld, val batch: SpriteBatch, val assetManager: AssetManager) : Disposable {
+class GameRenderer(val game: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
 
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val renderer = ShapeRenderer()
     private val debugCameraController = DebugCameraController().apply { setStartPosition(WORLD_CENTER_X, WORLD_CENTER_Y) }
+    private val map = assetManager[AssetDescriptors.LEVEL_01]
+    private val mapRenderer = OrthogonalTiledMapRenderer(map, UNIT_SCALE, batch)
 
     fun update(delta: Float) {
         // handle debug camera input
@@ -33,6 +38,12 @@ class GameRenderer(val game: GameWorld, val batch: SpriteBatch, val assetManager
 
         // clear screen
         GdxUtils.clearScreen()
+
+        // render map
+        mapRenderer.apply {
+            setView(camera) // internally sets project matrix, important to call
+            render() // internally calls begin()/end() from SpriteBatch
+        }
 
         // render debug
         renderDebug()

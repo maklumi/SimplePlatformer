@@ -5,7 +5,7 @@ class GameWorld {
 
     var isDrawGrid = true
         private set
-    var isDrawDebug = true
+    var isDrawDebug = false
         private set
 
     val toggleDrawGrid: Unit
