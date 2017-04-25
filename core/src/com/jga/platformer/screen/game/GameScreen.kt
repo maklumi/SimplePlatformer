@@ -19,7 +19,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
     private lateinit var gameWorld: GameWorld
     private lateinit var renderer: GameRenderer
     private lateinit var controller: GameController
-    private val factory = EntityFactory()
+    private val factory = EntityFactory(assetManager)
 
     override fun show() {
         // todo move loading to loading screen
