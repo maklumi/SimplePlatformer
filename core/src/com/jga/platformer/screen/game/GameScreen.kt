@@ -1,7 +1,10 @@
 package com.jga.platformer.screen.game
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.jga.platformer.SimplePlatformerGame
+import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
@@ -17,6 +20,13 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
     private lateinit var controller: GameController
 
     override fun show() {
+        // todo move loading to loading screen
+        assetManager.apply {
+            setLoader(TiledMap::class.java, TmxMapLoader())
+            load(AssetDescriptors.LEVEL_01)
+            finishLoading()
+        }
+
         gameWorld = GameWorld()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)

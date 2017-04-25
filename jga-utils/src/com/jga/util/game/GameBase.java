@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.util.ads.AdController;
+import com.jga.util.assets.BasicAssetErrorListener;
 import com.jga.util.screen.ScreenBase;
 import com.jga.util.screen.transition.ScreenTransition;
 
@@ -56,6 +57,7 @@ public abstract class GameBase implements ApplicationListener {
 
         assetManager = new AssetManager();
         assetManager.getLogger().setLevel(Logger.DEBUG);
+        assetManager.setErrorListener(BasicAssetErrorListener.INSTANCE);
 
         batch = new SpriteBatch();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
