@@ -6,5 +6,6 @@ object MapObjectNames {
     val HAZARD = "hazard"
     val PLATFORM = "platform"
     val PLAYER = "player"
+    val COIN = "coin"
 
 }

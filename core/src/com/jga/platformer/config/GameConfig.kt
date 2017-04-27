@@ -15,5 +15,6 @@ object GameConfig {
     val UNIT_SCALE = 1f / 64f
 
     val PLAYER_SIZE = 0.95f
+    val COIN_SIZE = 0.5f
 }
 
