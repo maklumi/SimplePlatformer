@@ -1,5 +1,6 @@
 package com.jga.platformer.screen.game.world
 
+import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.utils.Array
 import com.jga.platformer.entity.Coin
 import com.jga.platformer.entity.Platform
@@ -30,6 +31,18 @@ class GameWorld {
     val coins = Array<Coin>()
 
     fun update(delta: Float) {
+        player.update(delta)
+
+        checkCollision()
+    }
+
+    private fun checkCollision() {
+        // player - platform
+        platforms.forEach { platform ->
+            if (Intersector.overlapConvexPolygons(player.bounds, platform.bounds)) {
+                player.jump()
+            }
+        }
 
     }
 

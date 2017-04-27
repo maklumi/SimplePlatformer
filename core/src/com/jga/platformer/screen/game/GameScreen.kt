@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.jga.platformer.SimplePlatformerGame
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.common.EntityFactory
+import com.jga.platformer.input.PlayerInputController
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
@@ -19,6 +20,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
     private lateinit var gameWorld: GameWorld
     private lateinit var renderer: GameRenderer
     private lateinit var controller: GameController
+    private lateinit var playerInputController: PlayerInputController
     private val factory = EntityFactory(assetManager)
 
     override fun show() {
@@ -33,9 +35,11 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
         gameWorld = factory.createGameWorld()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)
+        playerInputController = PlayerInputController(gameWorld)
     }
 
     override fun render(delta: Float) {
+        playerInputController.update(delta)
         controller.update(delta)
         renderer.update(delta)
     }
