@@ -16,10 +16,20 @@ class Player : EntityBase() {
         velocityY += GameConfig.GRAVITY_Y * delta
         setX(x + velocityX * delta)
         setY(y + velocityY * delta)
+
+        if (velocityY < 0) fall()
     }
 
     fun jump() {
         state = PlayerState.JUMPING
         velocityY = GameConfig.JUMP_VELOCITY
+    }
+
+    fun fall() {
+        state = PlayerState.FALLING
+    }
+
+    fun die() {
+        state = PlayerState.DEAD
     }
 }
