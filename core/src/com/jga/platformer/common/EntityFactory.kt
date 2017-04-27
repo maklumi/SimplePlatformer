@@ -4,12 +4,16 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.utils.Logger
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.LayerNames.HAZARDS
 import com.jga.platformer.assets.LayerNames.PLATFORMS
+import com.jga.platformer.assets.LayerNames.PLAYER
 import com.jga.platformer.assets.MapObjectNames
+import com.jga.platformer.config.GameConfig.PLAYER_SIZE
 import com.jga.platformer.entity.Platform
+import com.jga.platformer.entity.Player
 import com.jga.platformer.entity.WaterHazard
 import com.jga.platformer.screen.game.world.GameWorld
 import com.jga.util.Validate
@@ -26,6 +30,7 @@ class EntityFactory(val assetManager: AssetManager) {
         // process layers
         processLayer(map, HAZARDS, world)
         processLayer(map, PLATFORMS, world)
+        processLayer(map, PLAYER, world)
 
         return world
     }
@@ -52,6 +57,11 @@ class EntityFactory(val assetManager: AssetManager) {
             val platform = createPlatform(mapObject)
             world.platforms.add(platform)
         }
+
+        if (MapObjectNames.PLAYER == mapObject.name) {
+            val player = createPlayer(mapObject)
+            world.player = player
+        }
     }
 
     private fun <T : EntityBase> initializeEntityObject(entity: T, mapObject: MapObject) {
@@ -72,6 +82,19 @@ class EntityFactory(val assetManager: AssetManager) {
         val platform = Platform()
         initializeEntityObject(platform, mapObject)
         return platform
+    }
+
+    private fun createPlayer(mapObject: MapObject): Player {
+        val isTileMapObject = TiledMapTileMapObject::class.java.isInstance(mapObject)
+        if (!isTileMapObject){
+            throw IllegalArgumentException("Player spawn position is not TiledMapTileMapObject, but ${mapObject.javaClass.simpleName}")
+        }
+        val tileMapObject = mapObject as TiledMapTileMapObject
+
+        val player = Player()
+        player.setPosition(tileMapObject.x, tileMapObject.y)
+        player.setSize(PLAYER_SIZE)
+        return player
     }
 
 

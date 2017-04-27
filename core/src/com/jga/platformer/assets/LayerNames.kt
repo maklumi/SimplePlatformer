@@ -5,4 +5,5 @@ object LayerNames {
 
     val HAZARDS = "hazards"
     val PLATFORMS = "platforms"
+    val PLAYER = "player"
 }

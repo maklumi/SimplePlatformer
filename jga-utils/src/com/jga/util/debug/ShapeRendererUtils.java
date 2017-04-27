@@ -68,4 +68,11 @@ public class ShapeRendererUtils {
             polygon(renderer, entityBase.getBounds());
         }
     }
+
+    public static <T extends EntityBase> void entity(ShapeRenderer renderer, T entity) {
+        Validate.notNull(renderer);
+        Validate.notNull(entity);
+
+        polygon(renderer, entity.getBounds());
+    }
 }
