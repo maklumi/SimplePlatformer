@@ -86,5 +86,8 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         shapeRenderer.color = Color.GOLD
 
         ShapeRendererUtils.entities(shapeRenderer, gameWorld.waterHazards)
+
+        shapeRenderer.color = Color.OLIVE
+        ShapeRendererUtils.entities(shapeRenderer, gameWorld.platforms)
     }
 }

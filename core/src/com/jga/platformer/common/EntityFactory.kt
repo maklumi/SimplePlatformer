@@ -3,13 +3,17 @@ package com.jga.platformer.common
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.utils.Logger
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.LayerNames.HAZARDS
+import com.jga.platformer.assets.LayerNames.PLATFORMS
 import com.jga.platformer.assets.MapObjectNames
+import com.jga.platformer.entity.Platform
 import com.jga.platformer.entity.WaterHazard
 import com.jga.platformer.screen.game.world.GameWorld
 import com.jga.util.Validate
+import com.jga.util.entity.EntityBase
 import com.jga.util.map.MapUtils
 
 class EntityFactory(val assetManager: AssetManager) {
@@ -18,56 +22,58 @@ class EntityFactory(val assetManager: AssetManager) {
         val world = GameWorld()
 
         val map = assetManager[AssetDescriptors.LEVEL_01]
-        MapUtils.debugMapProperties(map.properties)
 
-        val hazardsLayer = map.layers[HAZARDS]
+        // process layers
+        processLayer(map, HAZARDS, world)
+        processLayer(map, PLATFORMS, world)
 
-        Validate.notNull(hazardsLayer, "Layer with name $HAZARDS not found")
-
-        MapUtils.debugMapProperties(hazardsLayer.properties)
-
-        val mapObjects = hazardsLayer.objects
-
-        val iterator = mapObjects.iterator()
-        while (iterator.hasNext()) {
-            val mapObject = iterator.next()
-            processMapObject(mapObject, world)
-            log.debug("mapObject= $mapObject")
-//            MapUtils.debugMapProperties(mapObject.properties)
-
-//            if (mapObject is RectangleMapObject) {
-//                log.debug("rectangle= ${mapObject.rectangle}")
-//            }
-        }
         return world
     }
 
-    private fun processMapObject(mapObject: MapObject, world: GameWorld) {
-        val mapObjectName = mapObject.name
+    private fun processLayer(map: TiledMap, layerName: String, gameWorld: GameWorld) {
+        val layers = map.layers
+        val layer = layers[layerName]
+        Validate.notNull(layer, "Layer with name $layerName not found")
+        MapUtils.debugMapProperties(layer.properties)
+        val mapObjects = layer.objects
+        mapObjects.forEach {
+            processMapObject(it, gameWorld)
+            log.debug("mapObject=$it")
+        }
+    }
 
-        if (MapObjectNames.HAZARD == mapObjectName) {
+    private fun processMapObject(mapObject: MapObject, world: GameWorld) {
+        if (MapObjectNames.HAZARD == mapObject.name) {
             val waterHazard = createWaterHazard(mapObject)
             world.waterHazards.add(waterHazard)
+        }
+
+        if (MapObjectNames.PLATFORM == mapObject.name) {
+            val platform = createPlatform(mapObject)
+            world.platforms.add(platform)
+        }
+    }
+
+    private fun <T : EntityBase> initializeEntityObject(entity: T, mapObject: MapObject) {
+        val rectangle = (mapObject as RectangleMapObject).rectangle
+        entity.apply {
+            setPosition(rectangle.x, rectangle.y)
+            setSize(rectangle.width, rectangle.height)
         }
     }
 
     private fun createWaterHazard(mapObject: MapObject): WaterHazard {
-        val isRectangleMapObject = RectangleMapObject::class.java.isInstance(mapObject)
-
-        if (!isRectangleMapObject) {
-            // throw exception if water hazard is not represented by rectangle
-            throw IllegalArgumentException("Water hazard needs to be represented by rectangle")
-        }
-
-        val rectangleMapObject = mapObject as RectangleMapObject
-        val rectangle = rectangleMapObject.rectangle
-
-        val waterHazard = WaterHazard().apply {
-            setPosition(rectangle.x, rectangle.y)
-            setSize(rectangle.width, rectangle.height)
-        }
+        val waterHazard = WaterHazard()
+        initializeEntityObject(waterHazard, mapObject)
         return waterHazard
     }
+
+    private fun createPlatform(mapObject: MapObject): Platform {
+        val platform = Platform()
+        initializeEntityObject(platform, mapObject)
+        return platform
+    }
+
 
     companion object {
         private val log = Logger(EntityFactory::class.java.simpleName, Logger.DEBUG)
