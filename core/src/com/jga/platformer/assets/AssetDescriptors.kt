@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.utils.Array
 
 
 object AssetDescriptors {
@@ -21,4 +22,11 @@ object AssetDescriptors {
     val FONT = AssetDescriptor<BitmapFont>(AssetPaths.FONT, BitmapFont::class.java)
 
     val BACKGROUND = AssetDescriptor<Texture>(AssetPaths.BACKGROUND, Texture::class.java)
+
+    val ALL = Array<AssetDescriptor<*>>().apply {
+        addAll(LEVEL_01,
+                GAME_PLAY,
+                FONT,
+                BACKGROUND)
+    }
 }

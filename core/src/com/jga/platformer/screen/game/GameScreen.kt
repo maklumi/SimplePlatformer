@@ -1,19 +1,16 @@
 package com.jga.platformer.screen.game
 
 import com.badlogic.gdx.assets.AssetManager
-import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.TmxMapLoader
-import com.jga.platformer.SimplePlatformerGame
-import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.common.EntityFactory
 import com.jga.platformer.input.PlayerInputController
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
+import com.jga.util.game.GameBase
 import com.jga.util.screen.ScreenBaseAdapter
 
 
-class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
+class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
 
     val assetManager: AssetManager = game.assetManager
 
@@ -24,16 +21,6 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
     private val factory = EntityFactory(assetManager)
 
     override fun show() {
-        // todo move loading to loading screen
-        assetManager.apply {
-            setLoader(TiledMap::class.java, TmxMapLoader())
-            load(AssetDescriptors.LEVEL_01)
-            load(AssetDescriptors.GAME_PLAY)
-            load(AssetDescriptors.FONT)
-            load(AssetDescriptors.BACKGROUND)
-            finishLoading()
-        }
-
         gameWorld = factory.createGameWorld()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)
