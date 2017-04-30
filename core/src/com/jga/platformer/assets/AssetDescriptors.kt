@@ -14,5 +14,5 @@ object AssetDescriptors {
 
     val LEVEL_01 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_01, TiledMap::class.java, MAP_PARAMS)
 
-    val PLAYER = AssetDescriptor<TextureAtlas>(AssetPaths.PLAYER, TextureAtlas::class.java)
+    val GAME_PLAY = AssetDescriptor<TextureAtlas>(AssetPaths.GAME_PLAY, TextureAtlas::class.java)
 }

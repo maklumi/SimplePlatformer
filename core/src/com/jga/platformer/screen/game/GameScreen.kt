@@ -28,7 +28,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
         assetManager.apply {
             setLoader(TiledMap::class.java, TmxMapLoader())
             load(AssetDescriptors.LEVEL_01)
-            load(AssetDescriptors.PLAYER)
+            load(AssetDescriptors.GAME_PLAY)
             finishLoading()
         }
 

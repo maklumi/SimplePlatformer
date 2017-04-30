@@ -4,5 +4,5 @@ package com.jga.platformer.assets
 object AssetPaths {
 
     val LEVEL_01 = "level/level-01.tmx"
-    val PLAYER = "gameplay/gameplay.atlas"
+    val GAME_PLAY = "gameplay/gameplay.atlas"
 }

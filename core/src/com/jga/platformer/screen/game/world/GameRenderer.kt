@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.jga.platformer.assets.AssetDescriptors
+import com.jga.platformer.assets.RegionNames
 import com.jga.platformer.config.GameConfig.UNIT_SCALE
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_X
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_Y
@@ -30,6 +31,14 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
     private val map = assetManager[AssetDescriptors.LEVEL_01]
     private val mapRenderer = OrthogonalTiledMapRenderer(map, UNIT_SCALE, batch)
 
+    private val gamePlayAtlas = assetManager[AssetDescriptors.GAME_PLAY]
+
+    private val coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN)
+    private val fallingRegion = gamePlayAtlas.findRegion(RegionNames.PLAYER_FALLING)
+    private val jumpingRegion = gamePlayAtlas.findRegion(RegionNames.PLAYER_JUMPING)
+
+    private val batch = SpriteBatch()
+
     fun update(delta: Float) {
         // handle debug camera input
         debugCameraController.apply {
@@ -45,6 +54,8 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
             setView(camera) // internally sets project matrix, important to call
             render() // internally calls begin()/end() from SpriteBatch
         }
+
+        renderGamePlay()
 
         // render debug
         renderDebug()
@@ -80,6 +91,32 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
             end()
             color = oldColor
         }
+    }
+
+    private fun renderGamePlay() {
+        viewport.apply()
+        batch.projectionMatrix = camera.combined
+        batch.begin()
+
+        drawGamePlay()
+
+        batch.end()
+    }
+
+    private fun drawGamePlay() {
+        // coins
+        val coins = gameWorld.coins
+        for (coin in coins) {
+            batch.draw(coinRegion, coin.x, coin.y, coin.width, coin.height)
+        }
+
+        // player
+        val player = gameWorld.player
+        var region = jumpingRegion
+
+        if (player.state.isFalling) region = fallingRegion
+
+        batch.draw(region, player.x, player.y, player.width, player.height)
     }
 
     private fun drawDebug() {
