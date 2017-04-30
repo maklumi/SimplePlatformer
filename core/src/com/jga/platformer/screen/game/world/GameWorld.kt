@@ -58,6 +58,7 @@ class GameWorld {
             val overlaps = Intersector.overlapConvexPolygons(player.bounds, coin.bounds)
             if (overlaps) {
                 coins.removeValue(coin, true)
+                score += GameConfig.COIN_SCORE
             }
         }
 
@@ -66,6 +67,9 @@ class GameWorld {
             val overlaps = Intersector.overlapConvexPolygons(player.bounds, hazard.bounds)
             if (overlaps) {
                 player.die()
+                lives--
+                // spawn player again
+                player.reset()
             }
         }
 

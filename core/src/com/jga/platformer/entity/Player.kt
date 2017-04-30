@@ -9,6 +9,8 @@ class Player : EntityBase() {
     var state = PlayerState.FALLING
     var velocityX = 0f
     var velocityY = 0f
+    private var startX = 0f
+    private var startY = 0f
 
     override fun update(delta: Float) {
         super.update(delta)
@@ -35,4 +37,17 @@ class Player : EntityBase() {
 
     val isfacingRight: Boolean
         get() = velocityX >= 0
+
+    fun reset() {
+        setPosition(startX, startY)
+        state = PlayerState.FALLING
+        velocityX = 0f
+        velocityY = 0f
+
+    }
+
+    fun setStartingPosition(x: Float, y: Float) {
+        startX = x
+        startY = y
+    }
 }

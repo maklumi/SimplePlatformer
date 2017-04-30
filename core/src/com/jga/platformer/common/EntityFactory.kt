@@ -102,6 +102,7 @@ class EntityFactory(val assetManager: AssetManager) {
 
         val player = Player()
         player.setPosition(tileMapObject.x, tileMapObject.y)
+        player.setStartingPosition(tileMapObject.x, tileMapObject.y)
         player.setSize(PLAYER_SIZE)
         return player
     }

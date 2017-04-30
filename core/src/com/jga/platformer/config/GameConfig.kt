@@ -28,5 +28,7 @@ object GameConfig {
 
     val HUD_WIDTH = 1280f // world unit, 1:1 pixel per unit
     val HUD_HEIGHT = 780f
+
+    val COIN_SCORE = 20
 }
 

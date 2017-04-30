@@ -176,7 +176,7 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         val startY = GameConfig.HUD_HEIGHT - offsetY
 
         for (i in 0..GameConfig.LIVES_START) {
-            if (gameWorld.lives <= 0) batch.color = WHITE_HALF_TRANSPARENT
+            if (gameWorld.lives <= i) batch.color = WHITE_HALF_TRANSPARENT
 
             val x = startX + i * (GameConfig.LIFE_WIDTH + GameConfig.LIFE_SPACING)
             batch.draw(lifeRegion, x, startY, GameConfig.LIFE_WIDTH, GameConfig.LIFE_HEIGHT)
