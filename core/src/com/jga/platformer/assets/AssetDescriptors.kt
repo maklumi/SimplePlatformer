@@ -1,6 +1,7 @@
 package com.jga.platformer.assets
 
 import com.badlogic.gdx.assets.AssetDescriptor
+import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
@@ -15,4 +16,6 @@ object AssetDescriptors {
     val LEVEL_01 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_01, TiledMap::class.java, MAP_PARAMS)
 
     val GAME_PLAY = AssetDescriptor<TextureAtlas>(AssetPaths.GAME_PLAY, TextureAtlas::class.java)
+
+    val FONT = AssetDescriptor<BitmapFont>(AssetPaths.FONT, BitmapFont::class.java)
 }

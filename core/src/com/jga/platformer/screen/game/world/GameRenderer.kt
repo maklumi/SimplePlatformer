@@ -3,6 +3,7 @@ package com.jga.platformer.screen.game.world
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
@@ -11,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.RegionNames
+import com.jga.platformer.config.GameConfig
 import com.jga.platformer.config.GameConfig.UNIT_SCALE
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_X
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_Y
@@ -39,6 +41,13 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
 
     private val batch = SpriteBatch()
 
+    private val PADDING = 40f
+    private val WHITE_HALF_TRANSPARENT = Color(1f, 1f, 1f, 0.5f)
+    private val hudViewport = FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT)
+    private val layout = GlyphLayout()
+    private val lifeRegion = gamePlayAtlas.findRegion(RegionNames.LIFE)
+    private val font = assetManager[AssetDescriptors.FONT]
+
     fun update(delta: Float) {
         // handle debug camera input
         debugCameraController.apply {
@@ -59,10 +68,13 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
 
         // render debug
 //        renderDebug()
+
+        renderHud()
     }
 
     fun resize(width: Int, height: Int) {
         viewport.update(width, height, true) // true = center camera
+        hudViewport.update(width, height, true)
         ViewportUtils.debugPixelsPerUnit(viewport)
     }
 
@@ -134,6 +146,41 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         shapeRenderer.color = Color.CYAN
         ShapeRendererUtils.entity(shapeRenderer, gameWorld.player)
         ShapeRendererUtils.entities(shapeRenderer, gameWorld.coins)
+
+    }
+
+    private fun renderHud() {
+        hudViewport.apply()
+        val oldColor = batch.color.cpy()
+        batch.projectionMatrix = hudViewport.camera.combined
+        batch.begin()
+
+        drawHud()
+
+        batch.end()
+        batch.color = oldColor
+    }
+
+    private fun drawHud() {
+        // score
+        val scoreString = "Score: ${gameWorld.score}"
+        layout.setText(font, scoreString)
+
+        val scoreY = GameConfig.HUD_HEIGHT - layout.height
+        font.draw(batch, layout, PADDING, scoreY)
+
+        // lives
+        val offsetX = GameConfig.LIVES_START * (GameConfig.LIFE_WIDTH + GameConfig.LIFE_SPACING)
+        val offsetY = GameConfig.LIFE_HEIGHT + GameConfig.LIFE_SPACING
+        val startX = GameConfig.HUD_WIDTH - offsetX
+        val startY = GameConfig.HUD_HEIGHT - offsetY
+
+        for (i in 0..GameConfig.LIVES_START) {
+            if (gameWorld.lives <= 0) batch.color = WHITE_HALF_TRANSPARENT
+
+            val x = startX + i * (GameConfig.LIFE_WIDTH + GameConfig.LIFE_SPACING)
+            batch.draw(lifeRegion, x, startY, GameConfig.LIFE_WIDTH, GameConfig.LIFE_HEIGHT)
+        }
 
     }
 }

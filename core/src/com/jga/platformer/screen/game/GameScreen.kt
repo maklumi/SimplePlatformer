@@ -29,6 +29,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
             setLoader(TiledMap::class.java, TmxMapLoader())
             load(AssetDescriptors.LEVEL_01)
             load(AssetDescriptors.GAME_PLAY)
+            load(AssetDescriptors.FONT)
             finishLoading()
         }
 

@@ -20,5 +20,13 @@ object GameConfig {
     val MOVE_VELOCITY = 3f
     val JUMP_VELOCITY = 9f
     val GRAVITY_Y = -14f
+
+    val LIVES_START = 3
+    val LIFE_WIDTH = 40f
+    val LIFE_HEIGHT = 40f
+    val LIFE_SPACING = 10f
+
+    val HUD_WIDTH = 1280f // world unit, 1:1 pixel per unit
+    val HUD_HEIGHT = 780f
 }
 
