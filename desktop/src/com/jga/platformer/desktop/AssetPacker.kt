@@ -9,10 +9,15 @@ object AssetPacker {
 
     @JvmStatic
     fun main(arg: Array<String>) {
+//        TexturePacker.process(
+//                RAW_ASSETS_PATH + "/gameplay",
+//                ASSETS_PATH + "/gameplay",
+//                "gameplay"
+//        )
         TexturePacker.process(
-                RAW_ASSETS_PATH + "/gameplay",
-                ASSETS_PATH + "/gameplay",
-                "gameplay"
+                RAW_ASSETS_PATH + "/skin",
+                ASSETS_PATH + "/ui",
+                "skin"
         )
     }
 }

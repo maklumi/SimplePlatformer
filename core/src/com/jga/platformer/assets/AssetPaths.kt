@@ -7,4 +7,5 @@ object AssetPaths {
     val GAME_PLAY = "gameplay/gameplay.atlas"
     val FONT = "ui/font/font.fnt"
     val BACKGROUND = "gameplay/background.png"
+    val SKIN = "ui/skin.json"
 }

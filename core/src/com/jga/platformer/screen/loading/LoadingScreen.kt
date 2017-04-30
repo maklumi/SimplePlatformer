@@ -4,7 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor
 import com.badlogic.gdx.utils.Array
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.config.GameConfig
-import com.jga.platformer.screen.game.GameScreen
+import com.jga.platformer.screen.menu.MenuScreen
 import com.jga.util.game.GameBase
 import com.jga.util.screen.loading.LoadingScreenBase
 
@@ -16,7 +16,7 @@ class LoadingScreen(gameBase: GameBase) : LoadingScreenBase(gameBase) {
     }
 
     override fun onLoadDone() {
-        game.setScreen(GameScreen(game))
+        game.setScreen(MenuScreen(game))
     }
 
     override fun getHudWidth(): Float {
