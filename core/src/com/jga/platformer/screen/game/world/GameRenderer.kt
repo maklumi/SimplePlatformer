@@ -47,6 +47,7 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
     private val layout = GlyphLayout()
     private val lifeRegion = gamePlayAtlas.findRegion(RegionNames.LIFE)
     private val font = assetManager[AssetDescriptors.FONT]
+    private val backgroundTexture = assetManager[AssetDescriptors.BACKGROUND]
 
     fun update(delta: Float) {
         // handle debug camera input
@@ -57,6 +58,8 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
 
         // clear screen
         GdxUtils.clearScreen()
+
+        renderBackground()
 
         // render map
         mapRenderer.apply {
@@ -183,4 +186,13 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         }
 
     }
+
+    private fun renderBackground() {
+        viewport.apply()
+        batch.projectionMatrix = camera.combined
+        batch.begin()
+        batch.draw(backgroundTexture, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT)
+        batch.end()
+    }
+
 }

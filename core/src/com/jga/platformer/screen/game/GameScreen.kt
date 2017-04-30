@@ -30,6 +30,7 @@ class GameScreen(val game: SimplePlatformerGame) : ScreenBaseAdapter() {
             load(AssetDescriptors.LEVEL_01)
             load(AssetDescriptors.GAME_PLAY)
             load(AssetDescriptors.FONT)
+            load(AssetDescriptors.BACKGROUND)
             finishLoading()
         }
 
