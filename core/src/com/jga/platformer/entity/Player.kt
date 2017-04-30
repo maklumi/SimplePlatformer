@@ -32,4 +32,7 @@ class Player : EntityBase() {
     fun die() {
         state = PlayerState.DEAD
     }
+
+    val isfacingRight: Boolean
+        get() = velocityX >= 0
 }

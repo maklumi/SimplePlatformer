@@ -58,7 +58,7 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         renderGamePlay()
 
         // render debug
-        renderDebug()
+//        renderDebug()
     }
 
     fun resize(width: Int, height: Int) {
@@ -115,6 +115,10 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         var region = jumpingRegion
 
         if (player.state.isFalling) region = fallingRegion
+
+        val isFlipX = region.isFlipX
+        if (player.isfacingRight && isFlipX) region.flip(true, false)
+        if (!player.isfacingRight && !isFlipX) region.flip(true, false)
 
         batch.draw(region, player.x, player.y, player.width, player.height)
     }
