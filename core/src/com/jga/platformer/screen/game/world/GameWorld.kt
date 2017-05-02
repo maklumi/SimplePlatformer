@@ -41,6 +41,9 @@ class GameWorld {
         checkCollision()
     }
 
+    val isGameOver: Boolean
+        get() = lives == 0
+
     private fun checkCollision() {
         // player - platform
         platforms.forEach { platform ->

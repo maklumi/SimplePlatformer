@@ -6,6 +6,7 @@ import com.jga.platformer.input.PlayerInputController
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
+import com.jga.platformer.screen.menu.MenuScreen
 import com.jga.util.game.GameBase
 import com.jga.util.screen.ScreenBaseAdapter
 
@@ -31,6 +32,10 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
         playerInputController.update(delta)
         controller.update(delta)
         renderer.update(delta)
+
+        if (gameWorld.isGameOver) {
+            game.setScreen(MenuScreen(game))
+        }
     }
 
     override fun resize(width: Int, height: Int) {
