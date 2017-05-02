@@ -26,8 +26,6 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
     private val log = Logger(GameScreen::class.java.simpleName, Logger.DEBUG)
 
     override fun show() {
-        val currentLevel = LevelController.currentLevel
-        log.debug("currentLevel is ${currentLevel.fileName}")
         gameWorld = factory.createGameWorld()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)

@@ -2,12 +2,13 @@ package com.jga.platformer.level
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.assets.AssetDescriptor
+import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.utils.Array
 import com.badlogic.gdx.utils.Logger
 
-object LevelController {
+class LevelController(val assetManager: AssetManager) {
 
     private val log = Logger(LevelController::class.java.simpleName, Logger.DEBUG)
 
@@ -17,7 +18,7 @@ object LevelController {
 
     private val levelDescriptors = Array<AssetDescriptor<TiledMap>>()
 
-    val currentLevel: AssetDescriptor<TiledMap>
+    var currentLevel: AssetDescriptor<TiledMap>
 
     init {
         val levelFileHandles = LEVEL_DIR.list(DOT_TMX)
@@ -30,5 +31,28 @@ object LevelController {
         log.debug("levelDescriptors-size ${levelDescriptors.size}")
 
         currentLevel = levelDescriptors.random()
+    }
+
+    fun getCurrentMap(): TiledMap {
+        return assetManager[currentLevel]
+    }
+
+    fun loadRandomLevel() {
+        unload()
+        randomLevel()
+        load()
+    }
+
+    private fun randomLevel() {
+        currentLevel = levelDescriptors.random()
+    }
+
+    private fun unload() {
+        assetManager.unload(currentLevel.fileName)
+    }
+
+    private fun load() {
+        assetManager.load(currentLevel)
+        assetManager.finishLoading()
     }
 }
