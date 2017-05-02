@@ -1,8 +1,10 @@
 package com.jga.platformer.screen.game
 
 import com.badlogic.gdx.assets.AssetManager
+import com.badlogic.gdx.utils.Logger
 import com.jga.platformer.common.EntityFactory
 import com.jga.platformer.input.PlayerInputController
+import com.jga.platformer.level.LevelController
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
@@ -21,7 +23,11 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
     private lateinit var playerInputController: PlayerInputController
     private val factory = EntityFactory(assetManager)
 
+    private val log = Logger(GameScreen::class.java.simpleName, Logger.DEBUG)
+
     override fun show() {
+        val currentLevel = LevelController.currentLevel
+        log.debug("currentLevel is ${currentLevel.fileName}")
         gameWorld = factory.createGameWorld()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)
