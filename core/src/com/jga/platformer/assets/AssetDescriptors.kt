@@ -17,6 +17,7 @@ object AssetDescriptors {
     }
 
     val LEVEL_01 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_01, TiledMap::class.java, MAP_PARAMS)
+    val LEVEL_02 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_02, TiledMap::class.java, MAP_PARAMS)
 
     val GAME_PLAY = AssetDescriptor<TextureAtlas>(AssetPaths.GAME_PLAY, TextureAtlas::class.java)
 
@@ -28,6 +29,7 @@ object AssetDescriptors {
 
     val ALL = Array<AssetDescriptor<*>>().apply {
         addAll(LEVEL_01,
+                LEVEL_02,
                 GAME_PLAY,
                 FONT,
                 SKIN,
