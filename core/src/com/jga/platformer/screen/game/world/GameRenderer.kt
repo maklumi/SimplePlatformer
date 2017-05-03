@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
@@ -24,13 +25,12 @@ import com.jga.util.debug.ShapeRendererUtils
 import com.jga.util.viewport.ViewportUtils
 
 
-class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
+class GameRenderer(private var map: TiledMap, val gameWorld: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
 
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val shapeRenderer = ShapeRenderer()
     private val debugCameraController = DebugCameraController().apply { setStartPosition(WORLD_CENTER_X, WORLD_CENTER_Y) }
-    private val map = assetManager[AssetDescriptors.LEVEL_01]
     private val mapRenderer = OrthogonalTiledMapRenderer(map, UNIT_SCALE, batch)
 
     private val gamePlayAtlas = assetManager[AssetDescriptors.GAME_PLAY]
@@ -83,8 +83,14 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
 
     fun screenToWorld(screenCoordinates: Vector2): Vector2 = viewport.unproject(screenCoordinates)
 
+    fun setMap(map: TiledMap) {
+        this.map = map
+        mapRenderer.map = map
+    }
+
     override fun dispose() {
         shapeRenderer.dispose()
+        mapRenderer.dispose()
     }
 
     private fun renderDebug() {

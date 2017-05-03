@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array
 
 object AssetDescriptors {
 
-    private val MAP_PARAMS = TmxMapLoader.Parameters().apply {
+    val MAP_PARAMS = TmxMapLoader.Parameters().apply {
         convertObjectToTileSpace = true
     }
 

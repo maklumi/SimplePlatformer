@@ -2,9 +2,9 @@ package com.jga.platformer.screen.game
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.utils.Logger
+import com.jga.platformer.SimplePlatformerGame
 import com.jga.platformer.common.EntityFactory
 import com.jga.platformer.input.PlayerInputController
-import com.jga.platformer.level.LevelController
 import com.jga.platformer.screen.game.world.GameController
 import com.jga.platformer.screen.game.world.GameRenderer
 import com.jga.platformer.screen.game.world.GameWorld
@@ -16,7 +16,7 @@ import com.jga.util.screen.ScreenBaseAdapter
 class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
 
     val assetManager: AssetManager = game.assetManager
-
+    private val levelController = (game as SimplePlatformerGame).levelController
     private lateinit var gameWorld: GameWorld
     private lateinit var renderer: GameRenderer
     private lateinit var controller: GameController
@@ -26,8 +26,9 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
     private val log = Logger(GameScreen::class.java.simpleName, Logger.DEBUG)
 
     override fun show() {
+        levelController.loadRandomLevel()
         gameWorld = factory.createGameWorld()
-        renderer = GameRenderer(gameWorld, game.batch, assetManager)
+        renderer = GameRenderer(levelController.getCurrentMap(), gameWorld, game.batch, assetManager)
         controller = GameController(gameWorld, renderer)
         playerInputController = PlayerInputController(gameWorld)
     }
