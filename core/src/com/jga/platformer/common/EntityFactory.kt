@@ -28,6 +28,8 @@ class EntityFactory(val assetManager: AssetManager) {
         Validate.notNull(world)
         Validate.notNull(map)
 
+        world.clear()
+
         // process layers
         processLayer(map, HAZARDS, world)
         processLayer(map, PLATFORMS, world)
@@ -94,7 +96,7 @@ class EntityFactory(val assetManager: AssetManager) {
     private fun createPlayer(mapObject: MapObject): Player {
         val isTileMapObject = TiledMapTileMapObject::class.java.isInstance(mapObject)
         if (!isTileMapObject) {
-            throw IllegalArgumentException("Player spawn position is not TiledMapTileMapObject, but ${mapObject.javaClass.simpleName}")
+            //    throw IllegalArgumentException("Player spawn position is not TiledMapTileMapObject, but ${mapObject.javaClass.simpleName}")
         }
         val tileMapObject = mapObject as TiledMapTileMapObject
 

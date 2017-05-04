@@ -42,16 +42,26 @@ class GameWorld {
 
         blockPlayerFromLeavingWorld()
         checkCollision()
+
+        // check if all coins are collected and set level to complete
+        if (coins.size == 0) state = GameState.LEVEL_COMPLETE
     }
 
     val isGameOver: Boolean
         get() = state.isGameOver
 
     val isLevelComplete: Boolean
-    get() = state.isLevelComplete
+        get() = state.isLevelComplete
 
     fun playing() {
         state = GameState.PLAYING
+    }
+
+    fun clear() {
+        platforms.clear()
+        waterHazards.clear()
+        coins.clear()
+        player = Player()
     }
 
     private fun checkCollision() {
@@ -99,6 +109,7 @@ class GameWorld {
     private fun levelComplete() {
         state = GameState.LEVEL_COMPLETE
     }
+
     private fun blockPlayerFromLeavingWorld() {
         // left
         if (player.x < 0f) player.x = 0f

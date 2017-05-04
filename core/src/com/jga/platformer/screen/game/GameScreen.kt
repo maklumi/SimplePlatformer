@@ -44,13 +44,15 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
         if (gameWorld.isLevelComplete) {
             levelController.loadRandomLevel()
             setupLevel()
+            renderer.setMap(levelController.getCurrentMap())
+            gameWorld.playing()
         }
 
         if (gameWorld.isGameOver) {
             game.setScreen(MenuScreen(game))
         }
     }
-    
+
     override fun resize(width: Int, height: Int) {
         renderer.resize(width, height)
     }
