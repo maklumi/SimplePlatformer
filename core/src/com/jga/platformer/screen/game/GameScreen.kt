@@ -27,11 +27,11 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
 
     override fun show() {
         levelController.loadRandomLevel()
+
         gameWorld = GameWorld()
-        val map = levelController.getCurrentMap()
-        factory.setupGameWorld(gameWorld, map)
+        setupLevel()
         renderer = GameRenderer(gameWorld, game.batch, assetManager)
-        renderer.setMap(map)
+        renderer.setMap(levelController.getCurrentMap())
         controller = GameController(gameWorld, renderer)
         playerInputController = PlayerInputController(gameWorld)
     }
@@ -41,11 +41,16 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
         controller.update(delta)
         renderer.update(delta)
 
+        if (gameWorld.isLevelComplete) {
+            levelController.loadRandomLevel()
+            setupLevel()
+        }
+
         if (gameWorld.isGameOver) {
             game.setScreen(MenuScreen(game))
         }
     }
-
+    
     override fun resize(width: Int, height: Int) {
         renderer.resize(width, height)
     }
@@ -56,5 +61,9 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
 
     override fun dispose() {
         renderer.dispose()
+    }
+
+    private fun setupLevel() {
+        factory.setupGameWorld(gameWorld, levelController.getCurrentMap())
     }
 }

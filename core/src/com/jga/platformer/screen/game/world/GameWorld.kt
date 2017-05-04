@@ -2,6 +2,7 @@ package com.jga.platformer.screen.game.world
 
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.utils.Array
+import com.jga.platformer.common.GameState
 import com.jga.platformer.config.GameConfig
 import com.jga.platformer.entity.Coin
 import com.jga.platformer.entity.Platform
@@ -34,6 +35,8 @@ class GameWorld {
     var score = 0
     var lives = GameConfig.LIVES_START
 
+    var state = GameState.PLAYING
+
     fun update(delta: Float) {
         player.update(delta)
 
@@ -42,7 +45,14 @@ class GameWorld {
     }
 
     val isGameOver: Boolean
-        get() = lives == 0
+        get() = state.isGameOver
+
+    val isLevelComplete: Boolean
+    get() = state.isLevelComplete
+
+    fun playing() {
+        state = GameState.PLAYING
+    }
 
     private fun checkCollision() {
         // player - platform
@@ -74,10 +84,21 @@ class GameWorld {
                 // spawn player again
                 player.reset()
             }
+
+            if (lives <= 0) {
+                gameOver()
+            }
         }
 
     }
 
+    private fun gameOver() {
+        state = GameState.GAME_OVER
+    }
+
+    private fun levelComplete() {
+        state = GameState.LEVEL_COMPLETE
+    }
     private fun blockPlayerFromLeavingWorld() {
         // left
         if (player.x < 0f) player.x = 0f
