@@ -47,7 +47,7 @@ class EntityFactory(val assetManager: AssetManager) {
         val mapObjects = layer.objects
         mapObjects.forEach {
             processMapObject(it, gameWorld)
-            log.debug("mapObject=$it")
+//            log.debug("mapObject=$it")
         }
     }
 
