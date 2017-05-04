@@ -31,7 +31,6 @@ class LevelController(val assetManager: AssetManager) {
         }
         log.debug("levelDescriptors-size ${levelDescriptors.size}")
 
-        loadRandomLevel()
     }
 
     fun getCurrentMap(): TiledMap {

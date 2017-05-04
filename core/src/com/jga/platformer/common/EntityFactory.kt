@@ -6,7 +6,6 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.utils.Logger
-import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.LayerNames.COLLECTIBLES
 import com.jga.platformer.assets.LayerNames.HAZARDS
 import com.jga.platformer.assets.LayerNames.PLATFORMS
@@ -25,10 +24,9 @@ import com.jga.util.map.MapUtils
 
 class EntityFactory(val assetManager: AssetManager) {
 
-    fun createGameWorld(): GameWorld {
-        val world = GameWorld()
-
-        val map = assetManager[AssetDescriptors.LEVEL_01]
+    fun setupGameWorld(world: GameWorld, map: TiledMap): GameWorld {
+        Validate.notNull(world)
+        Validate.notNull(map)
 
         // process layers
         processLayer(map, HAZARDS, world)

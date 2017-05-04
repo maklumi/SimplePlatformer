@@ -27,8 +27,11 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
 
     override fun show() {
         levelController.loadRandomLevel()
-        gameWorld = factory.createGameWorld()
-        renderer = GameRenderer(levelController.getCurrentMap(), gameWorld, game.batch, assetManager)
+        gameWorld = GameWorld()
+        val map = levelController.getCurrentMap()
+        factory.setupGameWorld(gameWorld, map)
+        renderer = GameRenderer(gameWorld, game.batch, assetManager)
+        renderer.setMap(map)
         controller = GameController(gameWorld, renderer)
         playerInputController = PlayerInputController(gameWorld)
     }

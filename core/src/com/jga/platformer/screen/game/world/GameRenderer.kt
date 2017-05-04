@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
+import com.badlogic.gdx.utils.Logger
 import com.badlogic.gdx.utils.viewport.FitViewport
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.RegionNames
@@ -25,13 +26,13 @@ import com.jga.util.debug.ShapeRendererUtils
 import com.jga.util.viewport.ViewportUtils
 
 
-class GameRenderer(private var map: TiledMap, val gameWorld: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
+class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
 
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
     private val shapeRenderer = ShapeRenderer()
     private val debugCameraController = DebugCameraController().apply { setStartPosition(WORLD_CENTER_X, WORLD_CENTER_Y) }
-    private val mapRenderer = OrthogonalTiledMapRenderer(map, UNIT_SCALE, batch)
+    private var mapRenderer: OrthogonalTiledMapRenderer? = null
 
     private val gamePlayAtlas = assetManager[AssetDescriptors.GAME_PLAY]
 
@@ -49,6 +50,8 @@ class GameRenderer(private var map: TiledMap, val gameWorld: GameWorld, batch: S
     private val font = assetManager[AssetDescriptors.FONT]
     private val backgroundTexture = assetManager[AssetDescriptors.BACKGROUND]
 
+    private val log = Logger(GameRenderer::class.java.simpleName, Logger.DEBUG)
+
     fun update(delta: Float) {
         // handle debug camera input
         debugCameraController.apply {
@@ -62,10 +65,15 @@ class GameRenderer(private var map: TiledMap, val gameWorld: GameWorld, batch: S
         renderBackground()
 
         // render map
-        mapRenderer.apply {
-            setView(camera) // internally sets project matrix, important to call
-            render() // internally calls begin()/end() from SpriteBatch
+        if (mapRenderer != null) {
+            mapRenderer!!.apply {
+                setView(camera) // internally sets project matrix, important to call
+                render() // internally calls begin()/end() from SpriteBatch
+            }
+        } else {
+            log.debug("Map is not set on GameRenderer")
         }
+
 
         renderGamePlay()
 
@@ -84,13 +92,13 @@ class GameRenderer(private var map: TiledMap, val gameWorld: GameWorld, batch: S
     fun screenToWorld(screenCoordinates: Vector2): Vector2 = viewport.unproject(screenCoordinates)
 
     fun setMap(map: TiledMap) {
-        this.map = map
-        mapRenderer.map = map
+        if (mapRenderer == null) mapRenderer = OrthogonalTiledMapRenderer(map, UNIT_SCALE, batch)
+        mapRenderer!!.map = map
     }
 
     override fun dispose() {
         shapeRenderer.dispose()
-        mapRenderer.dispose()
+        mapRenderer?.dispose()
     }
 
     private fun renderDebug() {
