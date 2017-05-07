@@ -4,15 +4,12 @@ import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.utils.Logger
 import com.jga.platformer.assets.LayerNames.COLLECTIBLES
 import com.jga.platformer.assets.LayerNames.HAZARDS
 import com.jga.platformer.assets.LayerNames.PLATFORMS
 import com.jga.platformer.assets.LayerNames.PLAYER
 import com.jga.platformer.assets.MapObjectNames
-import com.jga.platformer.config.GameConfig.COIN_SIZE
-import com.jga.platformer.config.GameConfig.PLAYER_SIZE
 import com.jga.platformer.entity.Coin
 import com.jga.platformer.entity.Platform
 import com.jga.platformer.entity.Player
@@ -94,27 +91,32 @@ class EntityFactory(val assetManager: AssetManager) {
     }
 
     private fun createPlayer(mapObject: MapObject): Player {
-        val isTileMapObject = TiledMapTileMapObject::class.java.isInstance(mapObject)
-        if (!isTileMapObject) {
-            //    throw IllegalArgumentException("Player spawn position is not TiledMapTileMapObject, but ${mapObject.javaClass.simpleName}")
-        }
-        val tileMapObject = mapObject as TiledMapTileMapObject
+//        val isTileMapObject = TiledMapTileMapObject::class.java.isInstance(mapObject)
+//        if (!isTileMapObject) {
+//            //    throw IllegalArgumentException("Player spawn position is not TiledMapTileMapObject, but ${mapObject.javaClass.simpleName}")
+//        }
+//        val tileMapObject = mapObject as TiledMapTileMapObject
 
         val player = Player()
-        player.setPosition(tileMapObject.x, tileMapObject.y)
-        player.setStartingPosition(tileMapObject.x, tileMapObject.y)
-        player.setSize(PLAYER_SIZE)
+//        player.setPosition(tileMapObject.x, tileMapObject.y)
+//        player.setStartingPosition(tileMapObject.x, tileMapObject.y)
+//        player.setSize(PLAYER_SIZE)
+        initializeEntityObject(player, mapObject)
+        // make sure to reset to original position
+        player.setStartingPosition(player.x, player.y)
         return player
     }
 
     private fun createCoin(mapObject: MapObject): Coin {
-        mapObject as TiledMapTileMapObject
+//        mapObject as TiledMapTileMapObject
+//
+//        val coin = Coin().apply {
+//            setPosition(mapObject.x, mapObject.y)
+//            setSize(COIN_SIZE)
+//        }
 
-        val coin = Coin().apply {
-            setPosition(mapObject.x, mapObject.y)
-            setSize(COIN_SIZE)
-        }
-
+        val coin = Coin()
+        initializeEntityObject(coin, mapObject)
         return coin
     }
 
