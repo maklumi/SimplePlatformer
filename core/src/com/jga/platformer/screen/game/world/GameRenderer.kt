@@ -78,7 +78,7 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
         renderGamePlay()
 
         // render debug
-//        renderDebug()
+        renderDebug()
 
         renderHud()
     }

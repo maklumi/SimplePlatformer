@@ -18,6 +18,7 @@ object AssetDescriptors {
 
     val LEVEL_01 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_01, TiledMap::class.java, MAP_PARAMS)
     val LEVEL_02 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_02, TiledMap::class.java, MAP_PARAMS)
+    val LEVEL_03 = AssetDescriptor<TiledMap>(AssetPaths.LEVEL_03, TiledMap::class.java, MAP_PARAMS)
 
     val GAME_PLAY = AssetDescriptor<TextureAtlas>(AssetPaths.GAME_PLAY, TextureAtlas::class.java)
 
