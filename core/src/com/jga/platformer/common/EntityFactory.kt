@@ -91,16 +91,7 @@ class EntityFactory(val assetManager: AssetManager) {
     }
 
     private fun createPlayer(mapObject: MapObject): Player {
-//        val isTileMapObject = TiledMapTileMapObject::class.java.isInstance(mapObject)
-//        if (!isTileMapObject) {
-//            //    throw IllegalArgumentException("Player spawn position is not TiledMapTileMapObject, but ${mapObject.javaClass.simpleName}")
-//        }
-//        val tileMapObject = mapObject as TiledMapTileMapObject
-
         val player = Player()
-//        player.setPosition(tileMapObject.x, tileMapObject.y)
-//        player.setStartingPosition(tileMapObject.x, tileMapObject.y)
-//        player.setSize(PLAYER_SIZE)
         initializeEntityObject(player, mapObject)
         // make sure to reset to original position
         player.setStartingPosition(player.x, player.y)
@@ -108,13 +99,6 @@ class EntityFactory(val assetManager: AssetManager) {
     }
 
     private fun createCoin(mapObject: MapObject): Coin {
-//        mapObject as TiledMapTileMapObject
-//
-//        val coin = Coin().apply {
-//            setPosition(mapObject.x, mapObject.y)
-//            setSize(COIN_SIZE)
-//        }
-
         val coin = Coin()
         initializeEntityObject(coin, mapObject)
         return coin

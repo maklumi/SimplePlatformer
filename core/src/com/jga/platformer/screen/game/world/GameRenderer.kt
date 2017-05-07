@@ -26,7 +26,7 @@ import com.jga.util.debug.ShapeRendererUtils
 import com.jga.util.viewport.ViewportUtils
 
 
-class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: AssetManager) : Disposable {
+class GameRenderer(val gameWorld: GameWorld, val batch: SpriteBatch, assetManager: AssetManager) : Disposable {
 
     private val camera = OrthographicCamera()
     private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
@@ -39,8 +39,6 @@ class GameRenderer(val gameWorld: GameWorld, batch: SpriteBatch, assetManager: A
     private val coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN)
     private val fallingRegion = gamePlayAtlas.findRegion(RegionNames.PLAYER_FALLING)
     private val jumpingRegion = gamePlayAtlas.findRegion(RegionNames.PLAYER_JUMPING)
-
-    private val batch = SpriteBatch()
 
     private val PADDING = 40f
     private val WHITE_HALF_TRANSPARENT = Color(1f, 1f, 1f, 0.5f)

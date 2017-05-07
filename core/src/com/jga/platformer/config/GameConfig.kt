@@ -1,5 +1,7 @@
 package com.jga.platformer.config
 
+import com.jga.util.viewport.ViewportConfigBuilder
+
 object GameConfig {
 
     // desktop only
@@ -27,5 +29,10 @@ object GameConfig {
     val HUD_HEIGHT = 780f
 
     val COIN_SCORE = 20
+
+    val VIEWPORT_CONFIG = ViewportConfigBuilder()
+            .worldSize(WORLD_WIDTH, WORLD_HEIGHT)
+            .hudSize(HUD_WIDTH, HUD_WIDTH)
+            .build()
 }
 

@@ -17,8 +17,8 @@ class LevelController(val assetManager: AssetManager) {
 
     init {
         levelDescriptors.addAll(
-//                AssetDescriptors.LEVEL_01,
-//                AssetDescriptors.LEVEL_02,
+                AssetDescriptors.LEVEL_01,
+                AssetDescriptors.LEVEL_02,
                 AssetDescriptors.LEVEL_03
         )
     }
