@@ -2,14 +2,12 @@ package com.jga.util.screen.loading;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.jga.util.GdxUtils;
 import com.jga.util.game.GameBase;
 import com.jga.util.screen.ScreenBaseAdapter;
+import com.jga.util.viewport.ViewportManager;
 
 /**
  * Base Screen class for "Loading Screens" with progress bar.
@@ -19,8 +17,6 @@ import com.jga.util.screen.ScreenBaseAdapter;
 public abstract class LoadingScreenBase extends ScreenBaseAdapter {
 
     // == constants ==
-    private static final float DEFAULT_HUD_WIDTH = 640f;
-    private static final float DEFAULT_HUD_HEIGHT = 480f;
     private static final float DEFAULT_PROGRESS_BAR_HEIGHT = 60f;
 
 
@@ -34,8 +30,8 @@ public abstract class LoadingScreenBase extends ScreenBaseAdapter {
     protected final GameBase game;
     protected final AssetManager assetManager;
 
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    protected final ViewportManager viewportManager;
+
     private ShapeRenderer renderer;
 
     private float progress;
@@ -47,6 +43,7 @@ public abstract class LoadingScreenBase extends ScreenBaseAdapter {
     protected LoadingScreenBase(GameBase game) {
         this.game = game;
         assetManager = game.getAssetManager();
+        viewportManager = game.getViewportManager();
     }
 
     // == abstract methods ==
@@ -57,14 +54,11 @@ public abstract class LoadingScreenBase extends ScreenBaseAdapter {
     // == public methods ==
     @Override
     public void show() {
-        hudWidth = getHudWidth();
-        hudHeight = getHudHeight();
+        hudWidth = viewportManager.getHudWidth();
+        hudHeight = viewportManager.getHudHeight();
         progressBarWidth = getProgressBarWidth();
         progressBarHeight = getProgressBarHeight();
 
-
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(hudWidth, hudHeight, camera);
         renderer = new ShapeRenderer();
 
         for (AssetDescriptor descriptor : getAssetDescriptors()) {
@@ -77,8 +71,8 @@ public abstract class LoadingScreenBase extends ScreenBaseAdapter {
         update(delta);
 
         GdxUtils.clearScreen();
-        viewport.apply();
-        renderer.setProjectionMatrix(camera.combined);
+        viewportManager.applyHud();
+        renderer.setProjectionMatrix(viewportManager.getHudCombined());
         renderer.begin(ShapeRenderer.ShapeType.Filled);
 
         draw();
@@ -92,7 +86,7 @@ public abstract class LoadingScreenBase extends ScreenBaseAdapter {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        viewportManager.resize(width, height);
     }
 
     @Override
@@ -106,16 +100,8 @@ public abstract class LoadingScreenBase extends ScreenBaseAdapter {
     }
 
     // == private methods ==
-    protected float getHudWidth() {
-        return DEFAULT_HUD_WIDTH;
-    }
-
-    protected float getHudHeight() {
-        return DEFAULT_HUD_HEIGHT;
-    }
-
     protected float getProgressBarWidth() {
-        return getHudWidth() / 2f;
+        return hudWidth / 2f;
     }
 
     protected float getProgressBarHeight() {

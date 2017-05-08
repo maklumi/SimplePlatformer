@@ -2,7 +2,6 @@ package com.jga.platformer.screen.game.world
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.GlyphLayout
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -11,25 +10,23 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.utils.Disposable
 import com.badlogic.gdx.utils.Logger
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.RegionNames
 import com.jga.platformer.config.GameConfig
 import com.jga.platformer.config.GameConfig.UNIT_SCALE
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_X
 import com.jga.platformer.config.GameConfig.WORLD_CENTER_Y
-import com.jga.platformer.config.GameConfig.WORLD_HEIGHT
-import com.jga.platformer.config.GameConfig.WORLD_WIDTH
 import com.jga.util.GdxUtils
 import com.jga.util.debug.DebugCameraController
 import com.jga.util.debug.ShapeRendererUtils
+import com.jga.util.viewport.ViewportManager
 import com.jga.util.viewport.ViewportUtils
 
 
-class GameRenderer(val gameWorld: GameWorld, val batch: SpriteBatch, assetManager: AssetManager) : Disposable {
+class GameRenderer(val gameWorld: GameWorld, val batch: SpriteBatch, assetManager: AssetManager, val viewportManager: ViewportManager) : Disposable {
 
-    private val camera = OrthographicCamera()
-    private val viewport = FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera)
+    private val camera = viewportManager.getWorldCamera()
+    private val viewport = viewportManager.getWorldViewport()
     private val shapeRenderer = ShapeRenderer()
     private val debugCameraController = DebugCameraController().apply { setStartPosition(WORLD_CENTER_X, WORLD_CENTER_Y) }
     private var mapRenderer: OrthogonalTiledMapRenderer? = null
@@ -42,7 +39,7 @@ class GameRenderer(val gameWorld: GameWorld, val batch: SpriteBatch, assetManage
 
     private val PADDING = 40f
     private val WHITE_HALF_TRANSPARENT = Color(1f, 1f, 1f, 0.5f)
-    private val hudViewport = FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT)
+    private val hudViewport = viewportManager.getHudViewport()
     private val layout = GlyphLayout()
     private val lifeRegion = gamePlayAtlas.findRegion(RegionNames.LIFE)
     private val font = assetManager[AssetDescriptors.FONT]
@@ -82,9 +79,8 @@ class GameRenderer(val gameWorld: GameWorld, val batch: SpriteBatch, assetManage
     }
 
     fun resize(width: Int, height: Int) {
-        viewport.update(width, height, true) // true = center camera
-        hudViewport.update(width, height, true)
-        ViewportUtils.debugPixelsPerUnit(viewport)
+        viewportManager.resize(width, height)
+        viewportManager.debugPixelsPerUnit()
     }
 
     fun screenToWorld(screenCoordinates: Vector2): Vector2 = viewport.unproject(screenCoordinates)

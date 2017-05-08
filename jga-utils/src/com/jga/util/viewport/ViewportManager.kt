@@ -16,7 +16,7 @@ class ViewportManager(val viewportConfig: ViewportConfig) {
     private val worldViewport: Viewport
 
     init {
-        hudViewport = FitViewport(viewportConfig.worldWidth, viewportConfig.worldHeight, hudCamera)
+        hudViewport = FitViewport(viewportConfig.hudWidth, viewportConfig.hudHeight, hudCamera)
         hudViewport.apply()
 
         worldViewport = FitViewport(viewportConfig.worldWidth, viewportConfig.worldHeight, worldCamera)
@@ -76,4 +76,12 @@ class ViewportManager(val viewportConfig: ViewportConfig) {
     fun drawWorldGrid(shapeRenderer: ShapeRenderer) {
         ViewportUtils.drawGrid(worldViewport, shapeRenderer)
     }
+
+    fun getHudWidth(): Float = viewportConfig.hudWidth
+
+    fun getHudHeight(): Float = viewportConfig.hudHeight
+
+    fun getWorldWidth(): Float = viewportConfig.worldWidth
+
+    fun getWorldHeight(): Float = viewportConfig.worldHeight
 }

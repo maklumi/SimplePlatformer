@@ -30,7 +30,7 @@ class GameScreen(val game: GameBase) : ScreenBaseAdapter() {
 
         gameWorld = GameWorld()
         setupLevel()
-        renderer = GameRenderer(gameWorld, game.batch, assetManager)
+        renderer = GameRenderer(gameWorld, game.batch, assetManager, game.viewportManager)
         renderer.setMap(levelController.getCurrentMap())
         controller = GameController(gameWorld, renderer)
         playerInputController = PlayerInputController(gameWorld)

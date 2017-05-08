@@ -15,6 +15,8 @@ import com.jga.util.ads.AdController;
 import com.jga.util.assets.BasicAssetErrorListener;
 import com.jga.util.screen.ScreenBase;
 import com.jga.util.screen.transition.ScreenTransition;
+import com.jga.util.viewport.ViewportConfig;
+import com.jga.util.viewport.ViewportManager;
 
 /**
  * Custom {@link ApplicationListener} class with {@link ScreenTransition} support.
@@ -25,6 +27,9 @@ public abstract class GameBase implements ApplicationListener {
 
     // == attributes ==
     private final AdController adController;
+    private final ViewportConfig viewportConfig;
+    private ViewportManager viewportManager;
+
     private AssetManager assetManager;
     private SpriteBatch batch;
 
@@ -43,7 +48,8 @@ public abstract class GameBase implements ApplicationListener {
     private boolean transitionInProgress;
 
     // == constructors ==
-    public GameBase(AdController adController) {
+    public GameBase(AdController adController, ViewportConfig viewportConfig) {
+        this.viewportConfig = viewportConfig;
         this.adController = adController;
     }
 
@@ -58,6 +64,8 @@ public abstract class GameBase implements ApplicationListener {
         assetManager = new AssetManager();
         assetManager.getLogger().setLevel(Logger.DEBUG);
         assetManager.setErrorListener(BasicAssetErrorListener.INSTANCE);
+
+        viewportManager = new ViewportManager(viewportConfig);
 
         batch = new SpriteBatch();
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -204,6 +212,10 @@ public abstract class GameBase implements ApplicationListener {
 
     public AdController getAdController() {
         return adController;
+    }
+
+    public ViewportManager getViewportManager() {
+        return viewportManager;
     }
 
     // == private methods ==

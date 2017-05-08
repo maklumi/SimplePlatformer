@@ -7,10 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.utils.viewport.FitViewport
 import com.jga.platformer.assets.AssetDescriptors
 import com.jga.platformer.assets.RegionNames
-import com.jga.platformer.config.GameConfig
 import com.jga.platformer.screen.game.GameScreen
 import com.jga.util.GdxUtils
 import com.jga.util.game.GameBase
@@ -21,8 +19,8 @@ class MenuScreen(val game: GameBase) : ScreenBaseAdapter() {
 
     private val assetManager = game.assetManager
 
-    private val viewport = FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT)
-    private val stage = Stage(viewport, game.batch)
+    private val viewportManager = game.viewportManager
+    private val stage = Stage(viewportManager.getHudViewport(), game.batch)
     val skin = assetManager[AssetDescriptors.SKIN]
 
     override fun show() {
@@ -56,7 +54,7 @@ class MenuScreen(val game: GameBase) : ScreenBaseAdapter() {
     }
 
     override fun render(delta: Float) {
-        viewport.apply()
+        viewportManager.applyHud()
 
         GdxUtils.clearScreen()
         stage.act()
@@ -64,7 +62,7 @@ class MenuScreen(val game: GameBase) : ScreenBaseAdapter() {
     }
 
     override fun resize(width: Int, height: Int) {
-        viewport.update(width, height)
+        viewportManager.resize(width, height)
     }
 
     override fun hide() {
